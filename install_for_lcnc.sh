@@ -83,6 +83,7 @@ then
 	# install the QTDesigner plugins just in case someone needs to use it
 	cd ~/dev/qtpyvcp/pyqt5designer/Qt5.15.2-64bit/python3.9/
 	sed 's/x86-64/aarch64/g' ./install.sh > ./install64.sh
+	chmod a+x ./install64.sh
 	sudo -A ./install64.sh
 
 	# copy the qtpyvcp sims into place. People can delete them later if they want
