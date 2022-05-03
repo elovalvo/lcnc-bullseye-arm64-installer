@@ -16,7 +16,7 @@ then
     zenity --notification \
         --window-icon="info" \
         --text="Installing RT Kernel and supporting files for RT setup."
-    sudo -A apt install -y linux-image-rt-amd64 linux-headers-rt-amd64 grub-customizer
+    sudo -A apt install -y linux-image-rt-arm64 linux-headers-rt-arm64 grub-customizer
 
     zenity --info \
         --title="RT Kernel installed" \
@@ -57,12 +57,7 @@ then
 	CPUS=`nproc`
 	mkdir ~/dev/linuxcnc
 	git clone https://github.com/LinuxCNC/linuxcnc.git ~/dev/linuxcnc/rip
-	cd ~/dev/linuxcnc/rip/src/
-	./autogen.sh
-	./configure --with-realtime=uspace
-	make -j$CPUS
-	sudo -A make setuid
-
+	
 	# make the deb files
 	cd ~/dev/linuxcnc/rip/debian/
 	./configure uspace
@@ -71,7 +66,7 @@ then
 
 	# install the deb files
 	cd ~/dev/linuxcnc/
-	sudo -A dpkg -i linuxcnc-uspace_2.9.0~pre0_amd64.deb
+	sudo -A dpkg -i linuxcnc-uspace_2.9.0~pre0_arm64.deb
 	sudo -A dpkg -i linuxcnc-doc-en_2.9.0~pre0_all.deb
 fi
 
@@ -87,7 +82,8 @@ then
 
 	# install the QTDesigner plugins just in case someone needs to use it
 	cd ~/dev/qtpyvcp/pyqt5designer/Qt5.15.2-64bit/python3.9/
-	sudo -A ./install.sh
+	sed 's/x86-64/aarch64/g' ./install.sh > ./install64.sh
+	sudo -A ./install64.sh
 
 	# copy the qtpyvcp sims into place. People can delete them later if they want
 	cp -r ~/dev/qtpyvcp/linuxcnc ~/
